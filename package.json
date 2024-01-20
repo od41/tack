@@ -7,7 +7,14 @@
     "build": "next build",
     "start": "next start",
     "bs": "next build && next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "start-blockchain": "concurrently \"npx hardhat node\" \"wait-on http://127.0.0.1:8545 && npx hardhat run scripts/deploy.ts --network localhost\"",
+    "compile": "npx hardhat compile",
+    "test": "npx hardhat test",
+    "coverage": "npx hardhat coverage",
+    "clean": "npx hardhat clean",
+    "chain": "npx hardhat node",
+    "deployTesting": "npx hardhat run scripts/deploy.ts --network localhost"
   },
   "dependencies": {
     "@auth/firebase-adapter": "^1.0.6",

@@ -1,3 +1,5 @@
+import GenerateWalletComponent from "./_component/create_account"
+
 const WelcomePage = () => {
   return (
     <>
@@ -7,9 +9,7 @@ const WelcomePage = () => {
         </div>
       </header>
 
-      <div className="w-full">
-        Savings Wallet
-      </div>
+      <GenerateWalletComponent />
     </>
   )
 }
