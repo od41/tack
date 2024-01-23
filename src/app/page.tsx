@@ -7,15 +7,9 @@ import SavingsWalletComponent from "./_components/savings_wallet";
 const WelcomePage = () => {
   return (
     <>
-      <header className="border-b">
-        <div className=" flex-col md:flex">
-          Tack
-        </div>
-      </header>
-
       <GenerateWallet />
 
-      <hr />
+      {/* <hr />
       <DisplayBalance />
 
       <hr />
@@ -25,7 +19,7 @@ const WelcomePage = () => {
       <TransactionList walletAddress="0xfcb6ee26891fcd71ca0884b2b8a989fbdc4b2628" />
 
       <hr />
-      <SavingsWalletComponent />
+      <SavingsWalletComponent /> */}
     </>
   )
 }

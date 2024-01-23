@@ -42,7 +42,7 @@ function generateAddressFromPrivateKey(privateKey: string) {
       // Convert the amount to Wei
       const amountWei = ethers.utils.parseEther(sendAmount);
       console.log('sending: ', sendAmount, "ETH to: ", sendToAddress)
-      console.log('sending: ', amountWei, "Wei")
+      console.log('sending: ', amountWei.toString(), "Wei")
 
       // Send the transaction
       const transaction = await wallet.sendTransaction({
@@ -57,13 +57,21 @@ function generateAddressFromPrivateKey(privateKey: string) {
     }
   };
 
+  const fetchEthPriceInUsd = async () => {
+      const response = await fetch('https://api.coingecko.com/api/v3/simple/price?ids=ethereum&vs_currencies=usd');
+      const data = await response.json();
+      return data.ethereum.usd;
+  };
+
   async function sendEthWithRoundUp(): Promise<void> {
     const walletContractAddress = '0x2cd091664f0183c1978b3ea9b8bb3dc8c3eefd7c';
-    const ethToUsdConversionRate = 2000;
+    const ethToUsdConversionRate = await fetchEthPriceInUsd();
+    console.log('exchange rate', ethToUsdConversionRate)
     const amountInUsd = Number(amount) * ethToUsdConversionRate;
     const roundedUpAmountInUsd = Math.ceil(amountInUsd);
     const actualAmountInEth = amount;
-    const roundedUpAmountInEth = (roundedUpAmountInUsd - amountInUsd) / ethToUsdConversionRate;
+    const roundedUpAmountInEth = ((roundedUpAmountInUsd - amountInUsd) / ethToUsdConversionRate).toFixed(12);
+    console.log('rounded up amount',roundedUpAmountInEth)
     await sendEth(actualAmountInEth, toAddress);
     await sendEth(String(roundedUpAmountInEth), walletContractAddress);
 }

@@ -22,12 +22,7 @@ const config: Config = {
         'shadow-custom': '0 4.4px 11.8px 0 hsla(245, 100%, 61%, 0.19)',
       },
       backgroundImage: {
-        'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
-        'gradient-conic':
-          'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))',
-        'pink-gradient': 'linear-gradient(96deg, hsl(var(--accent-3)) 0%, hsl(var(--accent-4)) 137%)',
-        'reverse-pink-gradient': 'linear-gradient(96deg, hsl(var(--accent-4)) 0%, hsl(var(--accent-3)) 137%)',
-        'glass': 'linear-gradient(324deg, #182441 0%, rgba(24, 36, 65, 0.00) 101.76%)',
+        'glass': 'linear-gradient(180deg, rgba(255, 255, 255, 0.20) 0%, rgba(255, 255, 255, 0.00) 100%)',
       },
       colors: {
         border: "hsl(var(--stroke) / 0.1)",
@@ -72,20 +67,6 @@ const config: Config = {
         lg: "var(--radius)",
         md: "calc(var(--radius) - 2px)",
         sm: "calc(var(--radius) - 4px)",
-      },
-      keyframes: {
-        "accordion-down": {
-          from: { height: "0" },
-          to: { height: "var(--radix-accordion-content-height)" },
-        },
-        "accordion-up": {
-          from: { height: "var(--radix-accordion-content-height)" },
-          to: { height: "0" },
-        },
-      },
-      animation: {
-        "accordion-down": "accordion-down 0.2s ease-out",
-        "accordion-up": "accordion-up 0.2s ease-out",
       },
     },
   },

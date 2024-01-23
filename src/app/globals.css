@@ -9,9 +9,9 @@
     --white: 0deg 0% 100%;
     --primary-white: 0deg 0% 100%;
 
-    --accent-shade: 222deg 46% 17%;
+    --accent-shade: 228deg, 95%, 33%;
     --accent-1: 222deg 47% 11%;
-    --accent-2: 241deg 77% 63%;
+    --accent-2: 228deg, 100%, 43%;
     --accent-3: 330deg 81% 60%;
     --accent-4: 0deg 91% 71%;
 
@@ -69,9 +69,9 @@
  
 @layer base {
   * {
-    @apply border-border;
+    /* @apply border-border; */
   }
   body {
-    @apply bg-background text-foreground;
+    /* @apply bg-background text-foreground; */
   }
 }
