@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import { ethers } from 'ethers';
 
-const GenerateWalletComponent = () => {
+const GenerateWallet = () => {
   const [address, setAddress] = useState('');
   const [seedPhrase, setSeedPhrase] = useState('');
   const [privateKey, setPrivateKey] = useState('');
@@ -24,7 +24,8 @@ const GenerateWalletComponent = () => {
 
   return (
     <div>
-      <h2>Generate Wallet</h2>
+      {/* <h2>Generate Wallet</h2> */}
+      <hr />
       <button onClick={generateWallet}>Generate Wallet</button>
       <div>
         <strong>Address:</strong> {address}
@@ -35,8 +36,10 @@ const GenerateWalletComponent = () => {
       <div>
         <strong>Private Key:</strong> {privateKey}
       </div>
+
+      
     </div>
   );
 };
 
-export default GenerateWalletComponent;
+export default GenerateWallet;
