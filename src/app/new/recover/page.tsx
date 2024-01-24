@@ -9,11 +9,11 @@ const WelcomePage = () => {
       <div className='relative w-full flex justify-center'>
   <Image src={String(threeDCubesBg.default.src)} alt="image" width={300} height={300} className=' z-0 '/>
 </div> 
-      <h2 className="text-lg">
+      <h2 className="text-lg font-bold text-center my-4">
         Welcome to Tack!
       </h2>
 
-      <div className="flex flex-col w-1/2 gap-3 items=center">
+      <div className="flex flex-col w-1/2 gap-3 items=center mx-auto">
         <Button>Create New Wallet</Button>
         <Button>Recover with Seed Phrase</Button>
       </div>

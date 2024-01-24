@@ -20,7 +20,7 @@
     --text-alt: 230deg 39% 68%;
     --text-muted: 226deg 22% 73%;
 
-    --stroke: 0deg 0% 98%;
+    --stroke: 0deg 6% 69%;
 
     --gray-50: 0deg 0% 98%;
     --gray-100: 220deg 20% 97%;
@@ -73,5 +73,13 @@
   }
   body {
     /* @apply bg-background text-foreground; */
+  }
+}
+
+@layer utilities {
+  .section-heading {
+    text-transform: uppercase;
+    font-size: 0.75rem; 
+    letter-spacing: 1;
   }
 }

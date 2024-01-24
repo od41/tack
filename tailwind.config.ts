@@ -25,7 +25,7 @@ const config: Config = {
         'glass': 'linear-gradient(180deg, rgba(255, 255, 255, 0.20) 0%, rgba(255, 255, 255, 0.00) 100%)',
       },
       colors: {
-        border: "hsl(var(--stroke) / 0.1)",
+        border: "hsl(var(--stroke) / 0.6)",
         'alt-stroke': "hsl(var(--stroke) / 0.05)",
         input: "hsl(var(--accent-shade))",
         ring: "hsl(var(--stroke) / 0.1)",

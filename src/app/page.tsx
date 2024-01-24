@@ -1,7 +1,6 @@
-import GenerateWallet from "@/app/_components/generate_wallet"
+import GenerateWallet from "@/app/new/wallet/_components/generate_wallet"
 import DisplayBalance from '@/app/_components/display_balance';
 import SendEth from '@/app/_components/send_eth';
-import TransactionList from "./_components/transactions_list";
 import SavingsWalletComponent from "./_components/savings_wallet";
 
 const WelcomePage = () => {
