@@ -35,7 +35,3 @@ export function formatDuration(timestamp: number) {
     return `${days} day${days !== 1 ? 's' : ''} ago`;
   }
 }
-
-export function transactionType(tx: Transaction) {
-  
-}
