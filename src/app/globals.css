@@ -6,6 +6,7 @@
 
   :root {
     --primary-black: 0deg 0% 0%;
+    --primary-black-2: 0deg 0% 0%;
     --white: 0deg 0% 100%;
     --primary-white: 0deg 0% 100%;
 
@@ -16,7 +17,7 @@
     --accent-4: 0deg 91% 71%;
 
     --white: 0deg 0% 100%;
-    --text: 226deg 100% 94%;
+    --text: 0deg 0% 0%;
     --text-alt: 230deg 39% 68%;
     --text-muted: 226deg 22% 73%;
 

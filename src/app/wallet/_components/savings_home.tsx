@@ -3,8 +3,11 @@ import React, { useEffect, useState } from 'react';
 import { ethers } from 'ethers';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import TransactionList from './transactions_list';
+import { formatAddress } from '@/lib/utils';
 
-const WalletHome = () => {
+const SavingsHome = () => {
   const [balance, setBalance] = useState<string | null>(null);
   const [walletAddress, setWalletAddress] = useState('0xFCB6ee26891fcd71ca0884B2b8a989Fbdc4B2628')
 
@@ -32,7 +35,7 @@ const WalletHome = () => {
     <div>
       <div className='my-6'>
         <div className='w-full grid grid-cols-2 items-end mb-1 gap-1'>
-          <span className='w-fit section-heading'>Balance</span>
+          <span className='w-fit section-heading'>savings</span>
           {/* <Separator className='w-full bg-[#B4AAAA]' /> */}
         </div>
         <div className="text-sm bg-stroke bg-opacity-20 border-white/50 border p-3 rounded-lg backdrop-blur-lg">
@@ -44,40 +47,20 @@ const WalletHome = () => {
 
       <div className="flex w-full gap-3 mb-6">
         <Button variant="outline" className='w-full'>
-        <Link href="/wallet/send">
-            Send
+        <Link href="/wallet/deposit">
+            Deposit
           </Link>
         </Button>
         <Button variant="outline" className='w-full'>
-        <Link href="/wallet/receive">
-            Receive
+        <Link href="/wallet/withdraw">
+            Withdraw
           </Link>
         </Button>
       </div>
 
-      {/* <div className='mb-6'>
-        <div className='w-full grid grid-cols-2 items-end mb-1 gap-1'>
-          <span className='w-fit section-heading'>Savings</span>
-          {/* <Separator className='w-full bg-[#B4AAAA]' /> 
-        </div>
-        <div className="text-sm bg-stroke bg-opacity-20 border-white/50 border p-3 rounded-lg backdrop-blur-lg">
-        <span className='w-fit section-heading'>ETH</span>
-        <h4 className='w-fit text-lg text-stroke '>11.01</h4>
 
-        </div>
-      </div> */}
-
-      <div>
-        <div className='w-full grid grid-cols-2 items-end mb-1 gap-1'>
-          <span className='w-fit section-heading'>Recent Activity</span>
-          {/* <Separator className='w-full bg-[#B4AAAA]' /> */}
-        </div>
-        <div className="text-sm bg-stroke bg-opacity-20 border-white/50 border p-3 rounded-lg backdrop-blur-lg">
-          {/* <TransactionList walletAddress={walletAddress}/> */}
-        </div>
-      </div>
     </div>
   );
 };
 
-export default WalletHome;
+export default SavingsHome;

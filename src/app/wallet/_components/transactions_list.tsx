@@ -23,6 +23,13 @@ export type Transaction = {
   txreceipt_status: string;
 }
 
+const axiosInstance = axios.create({
+  headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${process.env.NEXT_PUBLIC_BLOCKSCOUT_API_KEY}`
+  }
+});
+
 const TransactionList = ({ walletAddress }: TransactionsListProps) => {
   const [transactions, setTransactions] = useState<Transaction[]>([]);
   const EXCHANGE_RATE = 2300;
@@ -30,10 +37,9 @@ const TransactionList = ({ walletAddress }: TransactionsListProps) => {
   useEffect(() => {
     const fetchTransactions = async () => {
       try {
-        // Replace 'YOUR_BLOCKSCOUT_API_URL' with the actual BlockScout API URL
         const blockscoutApiUrl = `https://pegasus.lightlink.io/api?module=account&action=txlist&address=${walletAddress}`;
 
-        const response = await axios.get(blockscoutApiUrl);
+        const response = await axiosInstance.get(blockscoutApiUrl);
         const transactionsData = response.data.result;
 
         setTransactions(transactionsData);

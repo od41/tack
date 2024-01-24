@@ -35,3 +35,14 @@ export function formatDuration(timestamp: number) {
     return `${days} day${days !== 1 ? 's' : ''} ago`;
   }
 }
+
+export function formatAddress(address: string, prefixLength: number = 5, suffixLength: number = 3): string {
+  if (address.length < prefixLength + suffixLength) {
+      throw new Error('Address length is too short');
+  }
+
+  const prefix = address.slice(0, prefixLength);
+  const suffix = address.slice(-suffixLength);
+
+  return `${prefix}...${suffix}`;
+}
