@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { ethers } from 'ethers';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
@@ -12,8 +12,9 @@ import {
 } from "@/components/ui/alert"
 import { LightbulbIcon, AlertTriangleIcon  } from 'lucide-react';
 import { formatAddress } from '@/lib/utils';
+import { WalletContext } from '@/app/_components/wallets_context';
 
-const SendEth = ({walletAddress}: {walletAddress: string}) => {
+const SendEth = () => {
   const [toAddress, setToAddress] = useState('');     // Recipient's address
   const [amount, setAmount] = useState('');           // Amount to send
   const [amountUsd, setAmountUsd] = useState(0);           // Amount to send
@@ -21,8 +22,9 @@ const SendEth = ({walletAddress}: {walletAddress: string}) => {
   const [transactionHash, setTransactionHash] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false)
   const [errorMessage, setErrorMessage] = useState("")
-  const [exchangeRate, setExchangeRate] = useState(2300)
-  const [balance, setBalance] = useState<string | null>(null);
+
+  const {wallet, balance, exchangeRate } = useContext(WalletContext)
+
 
 
   const sendEth = async (sendAmount: string, sendToAddress: string) => {
@@ -30,12 +32,9 @@ const SendEth = ({walletAddress}: {walletAddress: string}) => {
     try {
       // Connect to an Ethereum node
       const provider = new ethers.providers.JsonRpcProvider(process.env.NEXT_PUBLIC_LIGHTLINK_TESTNET_URL);
-      // Set up the wallet for the sender
-      const wallet = new ethers.Wallet(process.env.NEXT_PUBLIC_TEST_WALLET_PK_1!, provider); // Replace with the actual private key
-      // Convert the amount to Wei
+      const walletSigner = new ethers.Wallet(wallet!.privateKey, provider); // TODO Replace with the actual private key
       const amountWei = ethers.utils.parseEther(sendAmount);
-      // Send the transaction
-      const transaction = await wallet.sendTransaction({
+      const transaction = await walletSigner.sendTransaction({
         to: sendToAddress,
         value: amountWei,
       });
@@ -44,42 +43,13 @@ const SendEth = ({walletAddress}: {walletAddress: string}) => {
     } catch (error) {
       
       setErrorMessage((error as Error).message);
-      console.log('Error sending ETH:', (error as Error));
+      console.error('Error sending ETH:', (error as Error));
     }
-  };
-
-  useEffect(() => {
-    const fetchRate = async () => {
-      setExchangeRate(await fetchEthPriceInUsd());
-      await checkBalance()
-    }
-    fetchRate();
-  }, [])
-
-
-  const checkBalance = async () => {
-    try {
-      // Connect to an Ethereum node
-      const provider = new ethers.providers.JsonRpcProvider(process.env.NEXT_PUBLIC_LIGHTLINK_TESTNET_URL);
-      const balanceWei = await provider.getBalance(walletAddress);
-      const balanceEth = ethers.utils.formatEther(balanceWei);
-      setBalance(balanceEth);
-      console.log('fetching balance', balance)
-    } catch (error) {
-      console.error('Error fetching balance:', (error as Error).message);
-    }
-  };
-  
-
-  const fetchEthPriceInUsd = async () => {
-    const response = await fetch('https://api.coingecko.com/api/v3/simple/price?ids=ethereum&vs_currencies=usd');
-    const data = await response.json();
-    return data.ethereum.usd;
   };
 
   async function sendEthWithRoundUp(): Promise<void> {
     setIsLoading(true)
-    const walletContractAddress = '0x2cd091664f0183c1978b3ea9b8bb3dc8c3eefd7c'; // @TODO get this address from state
+    const walletContractAddress = '0x2cd091664f0183c1978b3ea9b8bb3dc8c3eefd7c'; // TODO @od41 get this address from state
     
     const amountInUsd = Number(amount) * exchangeRate;
     const roundedUpAmountInUsd = Math.ceil(amountInUsd);
@@ -101,7 +71,7 @@ const SendEth = ({walletAddress}: {walletAddress: string}) => {
       <div className='flex flex-col items-center w-full mx-auto my-8'>
         {errorMessage && <Alert className='mb-6' variant="destructive">
           <AlertTriangleIcon className="h-4 w-4 text-input mt-1.5" />
-          <AlertTitle>Something went wrong</AlertTitle>
+          <AlertTitle>Something is wrong</AlertTitle>
           <AlertDescription>
             {errorMessage}.
           </AlertDescription>
@@ -141,7 +111,7 @@ const SendEth = ({walletAddress}: {walletAddress: string}) => {
             variant="outline"
           >
             <Link href="/wallet">
-              Cancel
+              Go Back
             </Link>
           </Button>
           <Button

@@ -1,15 +1,11 @@
 "use client"
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import React, { useContext } from 'react';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import Link from 'next/link';
 import { ArrowDownRightIcon, ArrowUpLeftIcon } from 'lucide-react';
 import { formatDuration } from '@/lib/utils';
 import { ethers } from 'ethers';
-
-type TransactionsListProps = {
-  walletAddress: string;
-}
+import { WalletContext } from '@/app/_components/wallets_context';
 
 export type Transaction = {
   blockHash: string;
@@ -23,41 +19,11 @@ export type Transaction = {
   txreceipt_status: string;
 }
 
-const axiosInstance = axios.create({
-  headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${process.env.NEXT_PUBLIC_BLOCKSCOUT_API_KEY}`
-  }
-});
-
-const TransactionList = ({ walletAddress }: TransactionsListProps) => {
-  const [transactions, setTransactions] = useState<Transaction[]>([]);
-  const EXCHANGE_RATE = 2300;
-
-  useEffect(() => {
-    const fetchTransactions = async () => {
-      try {
-        const blockscoutApiUrl = `https://pegasus.lightlink.io/api?module=account&action=txlist&address=${walletAddress}`;
-
-        const response = await axiosInstance.get(blockscoutApiUrl);
-        const transactionsData = response.data.result;
-
-        setTransactions(transactionsData);
-      } catch (error) {
-        console.error('Error fetching transactions:', (error as Error).message);
-      }
-    };
-
-    if (walletAddress) {
-      fetchTransactions();
-    }
-
-    console.log(transactions)
-  }, [walletAddress]);
+const TransactionList = () => {
+  const {walletAddress, txList, exchangeRate } = useContext(WalletContext)
 
   function isDeposit(tx: Transaction): boolean{
-   if(tx.to === walletAddress) return true;
-   return false
+   return (tx.to).toLowerCase() === walletAddress!.toLowerCase()
   }
 
   const convertWeiToUsd = (weiAmount: number, ethPriceInUsd: number): number => {
@@ -69,17 +35,17 @@ const TransactionList = ({ walletAddress }: TransactionsListProps) => {
   return (
     <>
       <ScrollArea className="h-72 w-full rounded-md border">
-        {transactions.map((tx) => (
-          <Link key={tx.hash} href={`https://pegasus.lightlink.io/tx/${tx.hash}`} target="_blank" rel="noopener noreferrer" className='hover:bg-accent-2 mb-2'>
+        {txList!.map((tx) => (
+          <Link key={tx.hash} href={`${process.env.NEXT_PUBLIC_BLOCK_EXPLORER_LINK!}tx/${tx.hash}`} target="_blank" rel="noopener noreferrer" className='hover:bg-accent-2 mb-2'>
 
             <div className='flex w-full items-center hover:bg-[#E0DAD4] px-1.5 pr-3 py-1.5 mb-0.5 rounded-md justify-between'>
               <div className='flex items-center'>
 
-                {!isDeposit(tx) ? <ArrowUpLeftIcon className="w-5 rounded-full p-0.5 text-red-400 bg-red-300/30 sm" /> : <ArrowDownRightIcon className="w-5  p-0.5 text-green-600 bg-green-400/20 sm" />}
+                {isDeposit(tx) ? <ArrowDownRightIcon className="w-5  p-0.5 text-green-600 bg-green-400/20 sm" /> : <ArrowUpLeftIcon className="w-5 rounded-full p-0.5 text-red-400 bg-red-300/30 sm" />}
 
                 <div className="ml-3">
                   <div className='text-sm font-bold'>
-                    Deposit
+                    {isDeposit(tx) ? <>Receive</> : <>Send</>}
                   </div> 
                   <div className='text-[10px] mt-0.5'>
                     {formatDuration(tx.timeStamp)}
@@ -93,7 +59,7 @@ const TransactionList = ({ walletAddress }: TransactionsListProps) => {
                   {ethers.utils.formatEther(tx.value)} <span>ETH</span>
                 </div>
                 <div className="text-[10px] mt-0.5">
-                  ${convertWeiToUsd(tx.value, EXCHANGE_RATE).toFixed(2)}
+                  ${convertWeiToUsd(tx.value, exchangeRate).toFixed(2)}
                 </div>
               </div>
             </div>

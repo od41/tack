@@ -3,11 +3,9 @@ import { Plus_Jakarta_Sans } from 'next/font/google'
 import './globals.css'
 import { ThemeProvider } from '@/components/ui/theme-provider'
 import { Toaster } from "@/components/ui/toaster"
-import {
-  TooltipProvider,
-} from "@/components/ui/tooltip"
 import Container from './_components/container'
 import Image from 'next/image'
+import { WalletProvider } from './_components/wallets_context'
 const threeDCubesBg = require("@/assets/3d-cubes.png")
 
 
@@ -24,8 +22,6 @@ export default async function RootLayout({
   children: React.ReactNode;
 }) {
 
-console.log(threeDCubesBg)
-
   return (
     <html lang="en">
       <body className={`${plusJakartaFont.className} overflow-hidden bg-[url('/blur-bg.png')] flex items-center justify-center`}>
@@ -35,12 +31,12 @@ console.log(threeDCubesBg)
           enableSystem
           disableTransitionOnChange
         >
-          <TooltipProvider>
+          <WalletProvider>
           <Container>
             <Toaster />
             {children}
           </Container>
-          </TooltipProvider>
+          </WalletProvider>
         </ThemeProvider>
 <div className='absolute bottom-[-10rem] right-0'>
   <Image src={String(threeDCubesBg.default.src)} alt="image" width={460} height={536} className=' z-0 '/>

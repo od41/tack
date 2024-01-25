@@ -7,18 +7,6 @@ const WelcomePage = () => {
   return (
     <>
       <GenerateWallet />
-
-      {/* <hr />
-      <DisplayBalance />
-
-      <hr />
-      <SendEth />
-
-      <hr />
-      <TransactionList walletAddress="0xfcb6ee26891fcd71ca0884b2b8a989fbdc4b2628" />
-
-      <hr />
-      <SavingsWalletComponent /> */}
     </>
   )
 }
