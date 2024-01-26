@@ -20,7 +20,7 @@ const WalletHomePage = () => {
       </Tabs>
 
       <div className="flex flex-col w-full gap-5 mt-8 items-center mx-auto">
-        <Button variant="destructive" size="sm" className="w-full">
+        <Button variant="destructive" size="sm" className="w-full" asChild>
           <Link href="/login">
             Logout
           </Link>

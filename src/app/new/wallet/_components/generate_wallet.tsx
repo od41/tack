@@ -28,12 +28,12 @@ const GenerateWallet = () => {
       </div>}
 
       <div className="flex flex-col w-full gap-5 mt-8 items-center mx-auto">
-        {seedPhrase && <Button size="sm" variant="outline" className="w-full">
+        {seedPhrase && <Button size="sm" variant="outline" className="w-full" asChild>
           <Link href="/wallet">
             Open Your New Wallet
           </Link>
           </Button>}
-        <Button  variant="ghost" size="sm" className="w-full">
+        <Button variant="ghost" size="sm" className="w-full" asChild>
         <Link href="/new">
             Go Back
           </Link>

@@ -46,12 +46,12 @@ const SavingsHome = () => {
       </div>
 
       <div className="flex w-full gap-3 mb-6">
-        <Button variant="outline" className='w-full'>
+        <Button variant="outline" className='w-full' asChild>
         <Link href="/wallet/deposit">
             Deposit
           </Link>
         </Button>
-        <Button variant="outline" className='w-full'>
+        <Button variant="outline" className='w-full' asChild>
         <Link href="/wallet/withdraw">
             Withdraw
           </Link>

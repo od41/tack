@@ -23,12 +23,12 @@ const WalletHome = () => {
       </div>
 
       <div className="flex w-full gap-3 mb-6">
-        <Button variant="outline" className='w-full'>
+        <Button variant="outline" className='w-full' asChild>
         <Link href="/wallet/send">
             Send
           </Link>
         </Button>
-        <Button variant="outline" className='w-full'>
+        <Button variant="outline" className='w-full' asChild>
         <Link href="/wallet/receive">
             Receive
           </Link>

@@ -15,12 +15,12 @@ const WelcomePage = () => {
       </h2>
 
       <div className="flex flex-col w-full gap-5 items=center mx-auto">
-        <Button>
+        <Button asChild>
         <Link href="/new/wallet">
           Create New Wallet
           </Link>
         </Button>
-        <Button variant="outline">
+        <Button variant="outline" asChild>
           <Link href="/new/recover">
             Recover with Seed Phrase
           </Link>

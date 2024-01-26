@@ -109,6 +109,7 @@ const SendEth = () => {
           <Button
             className='w-full'
             variant="outline"
+            asChild
           >
             <Link href="/wallet">
               Go Back
