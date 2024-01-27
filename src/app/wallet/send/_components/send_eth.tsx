@@ -11,7 +11,7 @@ import {
   AlertTitle,
 } from "@/components/ui/alert"
 import { LightbulbIcon, AlertTriangleIcon  } from 'lucide-react';
-import { formatAddress } from '@/lib/utils';
+import { convertEthToUsd, formatAddress } from '@/lib/utils';
 import { WalletContext } from '@/app/_components/wallets_context';
 
 const SendEth = () => {
@@ -39,7 +39,7 @@ const SendEth = () => {
         value: amountWei,
       });
       // Update state with the transaction hash
-      setTransactionHash(transaction.hash);
+      setTransactionHash(transaction!.hash);
     } catch (error) {
       
       setErrorMessage((error as Error).message);
@@ -76,7 +76,7 @@ const SendEth = () => {
             {errorMessage}.
           </AlertDescription>
         </Alert>}
-        {(transactionHash != null && errorMessage == "")  && <Alert className='mb-6'>
+        {(transactionHash != null && errorMessage == "" && !isLoading)  && <Alert className='mb-6'>
           <LightbulbIcon className="h-4 w-4 text-input mt-1.5" />
           <AlertTitle>Send Complete!</AlertTitle>
           <AlertDescription>
@@ -97,8 +97,7 @@ const SendEth = () => {
           <Input type="amount" id="amount" placeholder="E.g 10" value={amount}
             onChange={(e) => {
               setAmount(e.target.value);
-              const valueInUsd = (parseFloat(e.target.value) * exchangeRate).toFixed(2);
-              setAmountUsd(Number(valueInUsd))
+              setAmountUsd(Number(convertEthToUsd(parseFloat(e.target.value), exchangeRate)))
               if(e.target.value > balance!) setErrorMessage("Insufficient balance")
               else setErrorMessage("")
               }} />

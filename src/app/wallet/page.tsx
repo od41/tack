@@ -18,14 +18,6 @@ const WalletHomePage = () => {
         <TabsContent value="wallet"><WalletHome /></TabsContent>
         <TabsContent value="savings"><SavingsHome /></TabsContent>
       </Tabs>
-
-      <div className="flex flex-col w-full gap-5 mt-8 items-center mx-auto">
-        <Button variant="destructive" size="sm" className="w-full" asChild>
-          <Link href="/login">
-            Logout
-          </Link>
-        </Button>
-      </div>
     </>
   )
 }

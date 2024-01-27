@@ -1,12 +1,14 @@
 "use client"
-import React, { useEffect, useState, useContext } from 'react';
+import React, { useContext } from 'react';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import TransactionList from './transactions_list';
 import { WalletContext } from '@/app/_components/wallets_context';
+import { Skeleton } from '@/components/ui/skeleton';
+import { convertEthToUsd } from '@/lib/utils';
 
 const WalletHome = () => {
-  const {balance} = useContext(WalletContext)
+  const {balance, isBalanceLoading, exchangeRate} = useContext(WalletContext)
 
   return (
     <div>
@@ -15,10 +17,17 @@ const WalletHome = () => {
           <span className='w-fit section-heading'>Balance</span>
           {/* <Separator className='w-full bg-[#B4AAAA]' /> */}
         </div>
-        <div className="text-sm bg-stroke bg-opacity-20 border-white/50 border p-3 rounded-lg backdrop-blur-lg">
-          <span className='w-fit section-heading'>ETH</span>
-          <h4 className='w-fit text-lg text-stroke '>{balance}</h4>
-
+        <div className="text-sm flex w-full justify-between items-end bg-blue-glass bg-opacity-90 border-[#8AA1E7]]/30 border p-3 rounded-lg backdrop-blur-lg">
+          <div className="">
+            <span className='w-fit section-heading text-white'>ETH</span>
+            {isBalanceLoading ? <Skeleton className="bg-white bg-opacity-80 h-7 w-[100px]" /> : <h4 className='w-fit text-lg text-white font-medium '>{balance}</h4>}
+          </div>
+          <div className="text-right">
+            {isBalanceLoading ? 
+              <Skeleton className="bg-white bg-opacity-80 h-5 w-[80px]" /> 
+              : <h4 className='w-fit text-md text-white font-medium '>${convertEthToUsd(parseFloat(balance!), exchangeRate)}</h4>
+            }
+          </div>
         </div>
       </div>
 

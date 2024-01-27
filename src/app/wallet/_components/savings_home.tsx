@@ -1,35 +1,27 @@
 "use client"
-import React, { useEffect, useState } from 'react';
-import { ethers } from 'ethers';
+import React, { useContext } from 'react';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import TransactionList from './transactions_list';
-import { formatAddress } from '@/lib/utils';
+import { Skeleton } from "@/components/ui/skeleton"
+import { WalletContext } from '@/app/_components/wallets_context';
+import { convertEthToUsd } from '@/lib/utils';
+
 
 const SavingsHome = () => {
-  const [balance, setBalance] = useState<string | null>(null);
-  const [walletAddress, setWalletAddress] = useState('0xFCB6ee26891fcd71ca0884B2b8a989Fbdc4B2628')
+  const { balance, isBalanceLoading, exchangeRate, wallet, walletAddress, savingsWallet, createNewSavingsWallet } = useContext(WalletContext)
 
-  const checkBalance = async () => {
-    try {
-      // Connect to an Ethereum node
-      const provider = new ethers.providers.JsonRpcProvider(process.env.NEXT_PUBLIC_LIGHTLINK_TESTNET_URL);
-      const balanceWei = await provider.getBalance(walletAddress);
-      const balanceEth = ethers.utils.formatEther(balanceWei);
-      setBalance(parseFloat(balanceEth).toFixed(4));
-    } catch (error) {
-      console.error('Error fetching balance:', (error as Error).message);
-    }
-  };
+  function handleCreateNewSavingsWallet() {
+    // do stuff
+  }
 
-  useEffect(() => {
-    const fetchBalance = async () => {
-      await checkBalance()
-    }
-    fetchBalance()
-  }, [walletAddress])
-
+  if(savingsWallet) {
+    return <div className='flex flex-col items-center my-8'>
+      <div className="text-sm mb-4">
+        No savings wallet found
+      </div>
+      <Button variant="outline" onClick={handleCreateNewSavingsWallet}>Create new savings wallet</Button>
+      </div>
+  }
 
   return (
     <div>
@@ -38,21 +30,28 @@ const SavingsHome = () => {
           <span className='w-fit section-heading'>savings</span>
           {/* <Separator className='w-full bg-[#B4AAAA]' /> */}
         </div>
-        <div className="text-sm bg-stroke bg-opacity-20 border-white/50 border p-3 rounded-lg backdrop-blur-lg">
-          <span className='w-fit section-heading'>ETH</span>
-          <h4 className='w-fit text-lg text-stroke '>{balance}</h4>
-
+        <div className="text-sm flex w-full justify-between items-end bg-blue-glass bg-opacity-90 border-[#8AA1E7]]/30 border p-3 rounded-lg backdrop-blur-lg">
+          <div className="">
+            <span className='w-fit section-heading text-white'>ETH</span>
+            {isBalanceLoading ? <Skeleton className="bg-white bg-opacity-80 h-7 w-[100px]" /> : <h4 className='w-fit text-lg text-white font-medium '>{balance}</h4>}
+          </div>
+          <div className="text-right">
+            {isBalanceLoading ? 
+              <Skeleton className="bg-white bg-opacity-80 h-5 w-[80px]" /> 
+              : <h4 className='w-fit text-md text-white font-medium '>${convertEthToUsd(parseFloat(balance!), exchangeRate)}</h4>
+            }
+          </div>
         </div>
       </div>
 
       <div className="flex w-full gap-3 mb-6">
         <Button variant="outline" className='w-full' asChild>
-        <Link href="/wallet/deposit">
+          <Link href="/wallet/deposit">
             Deposit
           </Link>
         </Button>
         <Button variant="outline" className='w-full' asChild>
-        <Link href="/wallet/withdraw">
+          <Link href="/wallet/withdraw">
             Withdraw
           </Link>
         </Button>

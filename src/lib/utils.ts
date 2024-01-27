@@ -46,3 +46,7 @@ export function formatAddress(address: string, prefixLength: number = 5, suffixL
 
   return `${prefix}...${suffix}`;
 }
+
+export function convertEthToUsd(amount: number, exchangeRate: number): string {
+  return (amount * exchangeRate).toFixed(2);
+}

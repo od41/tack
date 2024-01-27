@@ -23,6 +23,7 @@ const config: Config = {
       },
       backgroundImage: {
         'glass': 'linear-gradient(180deg, rgba(255, 255, 255, 0.20) 0%, rgba(255, 255, 255, 0.00) 100%)',
+        'blue-glass': 'linear-gradient(180deg, #0A33DD 0%, #0A33DD 25%, #8AA1E7 100%)'
       },
       colors: {
         border: "hsl(var(--stroke) / 0.6)",

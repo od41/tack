@@ -34,8 +34,8 @@ const TransactionList = () => {
 
   return (
     <>
-      <ScrollArea className="h-72 w-full rounded-md border">
-        {txList!.map((tx) => (
+      <ScrollArea className="h-40 w-full rounded-md border flex items-center justify-center">
+        {txList.length == 0 ? <div className='p-16 text-center'>You haven't completed any transactions</div> : txList!.map((tx) => (
           <Link key={tx.hash} href={`${process.env.NEXT_PUBLIC_BLOCK_EXPLORER_LINK!}tx/${tx.hash}`} target="_blank" rel="noopener noreferrer" className='hover:bg-accent-2 mb-2'>
 
             <div className='flex w-full items-center hover:bg-[#E0DAD4] px-1.5 pr-3 py-1.5 mb-0.5 rounded-md justify-between'>
