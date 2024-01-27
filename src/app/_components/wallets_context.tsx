@@ -11,7 +11,10 @@ type WalletContextProps = {
     txList: Transaction[];
     refreshBalance: (address: string) => void;
     refreshTransactions: () => void;
-    login: () => void;
+    login: (password: string) => Promise<boolean>;
+    generateWallet: (password: string, seedPhrase: string) => Promise<boolean>;
+    logout: () => void;
+    recover: (seedPhrase: string) => void;
     exchangeRate: number;
     savingsWallet: {
         savingsWalletAddress: string | undefined;
@@ -26,7 +29,10 @@ const defaultData: WalletContextProps = {
     txList: [],
     refreshBalance: (address: string) => {},
     refreshTransactions: () => {},
-    login: () => {},
+    login: async () => false,
+    generateWallet: async () => false,
+    logout: () => {},
+    recover: () => {},
     exchangeRate: 0, // default value of eth to USD
     savingsWallet: {
         savingsWalletAddress: undefined,
@@ -50,10 +56,51 @@ export function WalletProvider({ children }: { children: React.ReactNode }) {
     const [savingsWalletAddress, setSavingsWalletAddress] = useState<string | undefined>(undefined)
     const [savingsWalletBalance, setSavingsWalletBalance] = useState<string | undefined>(undefined)
     const [exchangeRate, setExchangeRate] = useState(2300)
+    const [encryptedJson, setEncryptedJson] = useState<any>(undefined)
 
-      async function recoverWalletFromSeed(){
+      async function login(password: string) {
+        if(password) {
+          const wallet = await ethers.Wallet.fromEncryptedJson(encryptedJson, password) // TODO find a way to load the json object from somewhere...
+          setWallet(wallet)
+          setWalletAddress(wallet.address)
+          await refreshBalance(wallet.address)
+          return true
+        }
+        return false
+      }
+
+      function progress(progress: number) {
+        console.log("Encrypting: " + progress + "% complete");
+    }
+
+      async function generateWallet(password: string, seedPhrase: string) {
+        if(password && seedPhrase) {
+          const wallet = ethers.Wallet.fromMnemonic(seedPhrase)
+          let _encryptedJson = await wallet.encrypt(password, progress);
+
+          // TODO find a way to load the json object from somewhere...
+          setEncryptedJson(_encryptedJson)
+          setWallet(wallet)
+          setWalletAddress(wallet.address)
+          await refreshBalance(wallet.address)
+          return true
+          
+        }
+        return false
+      }
+
+      function logout() {
+        setWallet(undefined)
+        setWalletAddress(undefined)
+        setBalance(undefined)
+        setTxList([])
+        setSavingsWalletAddress(undefined)
+        setSavingsWalletBalance(undefined)
+        
+      }
+
+      async function recover(seedPhrase: string) {
         let recoveredWallet;
-        const seedPhrase = process.env.NEXT_PUBLIC_WALLET_1_SEED_PHRASE!
         try {
           recoveredWallet = ethers.Wallet.fromMnemonic(seedPhrase);
         }catch(err){
@@ -63,10 +110,6 @@ export function WalletProvider({ children }: { children: React.ReactNode }) {
         setWallet(recoveredWallet);
         setWalletAddress(recoveredWallet.address);
         await refreshBalance(recoveredWallet.address)
-      }
-
-      async function login() {
-        await recoverWalletFromSeed()
       }
 
       async function refreshBalance(address: string) {
@@ -118,13 +161,16 @@ export function WalletProvider({ children }: { children: React.ReactNode }) {
         fetchData()
       }, [walletAddress])
     
-      useEffect(() => {
-        login!() // TODO remove and place in login view
-      }, [])
+      // useEffect(() => {
+      //   login!() // TODO remove and place in login view
+      // }, [])
     
     return (
         <WalletContext.Provider value={{
             login,
+            generateWallet,
+            logout,
+            recover,
             wallet,
             walletAddress,
             balance,
