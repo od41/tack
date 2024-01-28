@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useContext } from 'react';
 import { ethers } from 'ethers';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
@@ -23,7 +23,8 @@ const SendEth = () => {
   const [isLoading, setIsLoading] = useState(false)
   const [errorMessage, setErrorMessage] = useState("")
 
-  const {wallet, balance, exchangeRate } = useContext(WalletContext)
+  const {wallet, balance, exchangeRate, savingsWallet } = useContext(WalletContext)
+  const { savingsWalletAddress } = savingsWallet
 
 
 
@@ -49,7 +50,6 @@ const SendEth = () => {
 
   async function sendEthWithRoundUp(): Promise<void> {
     setIsLoading(true)
-    const walletContractAddress = '0x2cd091664f0183c1978b3ea9b8bb3dc8c3eefd7c'; // TODO @od41 get this address from state
     
     const amountInUsd = Number(amount) * exchangeRate;
     const roundedUpAmountInUsd = Math.ceil(amountInUsd);
@@ -57,12 +57,23 @@ const SendEth = () => {
     const roundedUpAmountInEth = ((roundedUpAmountInUsd - amountInUsd) / exchangeRate).toFixed(12);
     setAmountSavings(parseFloat(roundedUpAmountInEth))
     await sendEth(actualAmountInEth, toAddress);
-    await sendEth(String(roundedUpAmountInEth), walletContractAddress);
-    setIsLoading(false)
-    if(transactionHash){ 
-      setToAddress('')
-      setAmount('')
-      setAmountUsd(0)
+
+    if(!savingsWalletAddress) {
+      setIsLoading(false)
+      if(transactionHash){ 
+        setToAddress('')
+        setAmount('')
+        setAmountUsd(0)
+      }
+      return
+    } else {
+      await sendEth(String(roundedUpAmountInEth), savingsWalletAddress);
+      setIsLoading(false)
+      if(transactionHash){ 
+        setToAddress('')
+        setAmount('')
+        setAmountUsd(0)
+      }
     }
   }
 

@@ -12,10 +12,9 @@ const threeDCubesBg = require("@/assets/3d-cubes.png")
 const WelcomePage = () => {
   const [password, setPassword] = useState('')
   const [loading, setLoading] = useState(false)
-  const {login, walletAddress} = useContext(WalletContext)
+  const {login} = useContext(WalletContext)
   const router = useRouter()
-
-  console.log('walletaddress: ', walletAddress)
+  
   const handleLogin = async (e: any) => {
     setLoading(true)
     e.preventDefault()
@@ -35,7 +34,7 @@ const WelcomePage = () => {
   return (
     <>
       <h2 className="text-lg font-bold text-center my-4">
-        Welcome to Tack!
+        Welcome to Drops Wallet
       </h2>
       <div className='relative w-full flex justify-center'>
         <Image src={String(threeDCubesBg.default.src)} alt="image" width={150} height={300} className=' z-0 ' />

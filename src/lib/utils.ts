@@ -1,4 +1,3 @@
-import { Transaction } from "@/app/wallet/_components/transactions_list";
 import { type ClassValue, clsx } from "clsx"
 import { twMerge } from "tailwind-merge"
  

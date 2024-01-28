@@ -23,7 +23,6 @@ const RecoverPage = () => {
     try {
       recover(seedPhrase)
       setLoading(false)
-      console.log(walletAddress)
       router.push('/wallet')
 
     }catch(err){
