@@ -37,11 +37,11 @@ const WalletHome = () => {
             Send
           </Link>
         </Button>
-        <Button variant="outline" className='w-full' asChild>
+        {/* <Button variant="outline" className='w-full' asChild>
         <Link href="/wallet/receive">
             Receive
           </Link>
-        </Button>
+        </Button> */}
       </div>
 
       <div>
