@@ -23,7 +23,7 @@ const SendEth = () => {
   const [isLoading, setIsLoading] = useState(false)
   const [errorMessage, setErrorMessage] = useState("")
 
-  const {wallet, balance, exchangeRate, savingsWallet } = useContext(WalletContext)
+  const {wallet, balance, exchangeRate, savingsWallet, refreshBalance, refreshTransactions } = useContext(WalletContext)
   const { savingsWalletAddress } = savingsWallet
 
 

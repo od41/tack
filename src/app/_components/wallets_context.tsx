@@ -238,7 +238,6 @@ export function WalletProvider({ children }: { children: React.ReactNode }) {
     // get savings wallet address
     const _savingsWalletAddress = await factoryContract!.ownersToWallets(walletAddress);
     setSavingsWalletAddress(_savingsWalletAddress)
-    console.log('savings', _savingsWalletAddress)
 
     if (_savingsWalletAddress === ethers.constants.AddressZero) {
       setIsSavingsWalletLoading(false)
@@ -263,25 +262,76 @@ export function WalletProvider({ children }: { children: React.ReactNode }) {
     setIsSavingsWalletLoading(false)
   }
 
-  if(savingsWalletAddress){
+  useEffect(() => {
+    // non-custodial wallet balance and transactions
     const provider = new ethers.providers.JsonRpcProvider(process.env.NEXT_PUBLIC_LIGHTLINK_TESTNET_URL);
-    let lastBalance = ethers.constants.Zero
-    provider.on('block', () => {
-      provider.getBalance(savingsWalletAddress).then((balance) => {
+    let lastBalance = ethers.constants.Zero;
+
+    if (walletAddress) {
+      const checkTransactionsAndBalance = async () => {
+        try {
+          const balance = await provider.getBalance(walletAddress);
           if (!balance.eq(lastBalance)) {
-            lastBalance = balance
-            // convert a currency unit from wei to ether
-            const balanceInEth = ethers.utils.formatEther(balance)
-            console.log(`balance: ${balanceInEth} ETH`)
-            setSavingsWalletBalance(balanceInEth )          }
-    })
-})}
+            lastBalance = balance;
+            const balanceInEth = ethers.utils.formatEther(balance);
+            console.log(`Non-custodial Balance: ${balanceInEth} ETH`);
+            setBalance(balanceInEth);
+            refreshTransactions(); // refresh transactions
+          }
+        } catch (error) {
+          console.error('Error fetching balance:', error);
+        }
+      };
+
+      const blockListener = () => {
+        provider.on('block', checkTransactionsAndBalance);
+      };
+
+      blockListener(); // Initial call
+      // Cleanup function to remove the listener when component unmounts
+      return () => {
+        provider.removeListener('block', checkTransactionsAndBalance);
+      };
+    }
+}, [walletAddress]);
+
+useEffect(() => {
+  // savings wallet balance
+  const provider = new ethers.providers.JsonRpcProvider(process.env.NEXT_PUBLIC_LIGHTLINK_TESTNET_URL);
+  let lastBalance = ethers.constants.Zero;
+
+  if (savingsWalletAddress && savingsWalletAddress !== ethers.constants.AddressZero) {
+    const checkBalance = async () => {
+      try {
+        const balance = await provider.getBalance(savingsWalletAddress);
+        if (!balance.eq(lastBalance)) {
+          lastBalance = balance;
+          const balanceInEth = ethers.utils.formatEther(balance);
+          console.log(`Balance: ${balanceInEth} ETH`);
+          setSavingsWalletBalance(balanceInEth);
+        }
+      } catch (error) {
+        console.error('Error fetching balance:', error);
+      }
+    };
+
+    const blockListener = () => {
+      provider.on('block', checkBalance);
+    };
+
+    blockListener(); // Initial call
+    // Cleanup function to remove the listener when component unmounts
+    return () => {
+      provider.removeListener('block', checkBalance);
+    };
+  }
+}, [savingsWalletAddress]);
 
   useEffect(() => {
     if (walletAddress) {
 
       const fetchData = async () => {
-        await refreshBalance!(walletAddress!)
+        await refreshBalance(walletAddress!)
         setExchangeRate(await fetchEthPriceInUsd());
         await refreshTransactions()
         await getSavingsWallet()
