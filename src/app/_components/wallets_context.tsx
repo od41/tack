@@ -20,12 +20,14 @@ type WalletContextProps = {
   recover: (seedPhrase: string) => void;
   exchangeRate: number;
   createNewSavingsWallet: (numberOfDays: number) => Promise<void>;
+  withdrawSavings: () => Promise<void>;
   errorMessage: string | undefined;
   savingsWallet: {
     savingsWalletAddress: string | undefined;
     balance: string | undefined;
     isLoading: boolean;
     withdrawalDateTimestamp: number;
+    withdrawalError: string
   };
 }
 
@@ -43,12 +45,14 @@ const defaultData: WalletContextProps = {
   recover: () => { },
   exchangeRate: 0, // default value of eth to USD
   createNewSavingsWallet: async () => { },
+  withdrawSavings: async () => { },
   errorMessage: undefined,
   savingsWallet: {
     savingsWalletAddress: undefined,
     balance: undefined,
     isLoading: false,
     withdrawalDateTimestamp: 0,
+    withdrawalError: ""
   },
 }
 export const WalletContext = createContext(defaultData)
@@ -72,6 +76,8 @@ export function WalletProvider({ children }: { children: React.ReactNode }) {
   const [encryptedJson, setEncryptedJson] = useState<any>(undefined)
   const [withdrawalDateTimestamp, setWithdrawalDateTimestamp] = useState(0)
   const [isSavingsWalletLoading, setIsSavingsWalletLoading] = useState(false)
+  const [withdrawalError, setWithdrawalError] = useState("")
+
 
   const [errorMessage, setErrorMessage] = useState("")
 
@@ -200,10 +206,10 @@ export function WalletProvider({ children }: { children: React.ReactNode }) {
 
     try {
       setErrorMessage("");
-      const tx = await factoryContract!.createSavingsWallet(numberOfDays); // TODO should pass in the future date in days not in unix timestamp format
+      const tx = await factoryContract!.createSavingsWallet(numberOfDays); 
       await tx.wait()
       const _savingsWalletAddress = await factoryContract!.ownersToWallets(walletAddress);
-      console.log('New Savings Wallet deployed at:', _savingsWalletAddress);
+      console.log('New Savings Wallet deployed at:', _savingsWalletAddress); // TODO display the savings wallet address to the user
       setSavingsWalletAddress(_savingsWalletAddress);
 
       // get savings balance
@@ -272,6 +278,39 @@ export function WalletProvider({ children }: { children: React.ReactNode }) {
     setWithdrawalDateTimestamp(_withdrawalDate.toNumber());
 
     setIsSavingsWalletLoading(false)
+  }
+
+  // withdraw from the savings to your own wallet
+  async function withdrawSavings() {
+    setWithdrawalError('')
+    if(!savingsWalletAddress || savingsWalletAddress === ethers.constants.AddressZero) {
+      throw Error("Savings wallet doesn't exist")
+    }
+
+    if(!walletAddress || walletAddress === ethers.constants.AddressZero) {
+      throw Error("No wallet detected")
+    }
+    const provider = new ethers.providers.JsonRpcProvider(process.env.NEXT_PUBLIC_LIGHTLINK_TESTNET_URL);
+    const walletSigner = new ethers.Wallet(wallet!.privateKey, provider);
+
+    const savingsWalletContract = new ethers.Contract(
+      savingsWalletAddress,
+      savingsContractABI,
+      walletSigner
+    );
+
+    try {
+      const tx = await savingsWalletContract.withdraw();
+      await tx.wait()
+      await refreshBalance(walletAddress!)
+      await refreshTransactions()
+    } catch (error) {
+      // @ts-ignore
+      let message = (error as Error).error.reason
+      message = message.substring("execution reverted: ".length)
+      console.error('something went wrong', message)
+      setWithdrawalError(message)
+    }
   }
 
   useEffect(() => {
@@ -368,11 +407,13 @@ useEffect(() => {
       exchangeRate,
       createNewSavingsWallet,
       errorMessage,
+      withdrawSavings,
       savingsWallet: {
         savingsWalletAddress,
         balance: savingsWalletBalance,
         isLoading: isSavingsWalletLoading,
-        withdrawalDateTimestamp
+        withdrawalDateTimestamp,
+        withdrawalError
       }
     }}>
       {children}

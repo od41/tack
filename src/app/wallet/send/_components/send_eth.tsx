@@ -82,7 +82,7 @@ const SendEth = () => {
       <div className='flex flex-col items-center w-full mx-auto my-8'>
         {errorMessage && <Alert className='mb-6' variant="destructive">
           <AlertTriangleIcon className="h-4 w-4 text-input mt-1.5" />
-          <AlertTitle>Something is wrong</AlertTitle>
+          <AlertTitle>Something went wrong</AlertTitle>
           <AlertDescription>
             {errorMessage}.
           </AlertDescription>

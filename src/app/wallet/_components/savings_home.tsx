@@ -6,7 +6,7 @@ import { Skeleton } from "@/components/ui/skeleton"
 import { WalletContext } from '@/app/_components/wallets_context';
 import { convertEthToUsd } from '@/lib/utils';
 import { Alert, AlertTitle, AlertDescription } from '@/components/ui/alert';
-import { AlertTriangleIcon } from 'lucide-react';
+import { AlertTriangleIcon, LightbulbIcon } from 'lucide-react';
 import { ethers } from 'ethers';
 
 type CountdownProps = {
@@ -18,15 +18,18 @@ type CountdownProps = {
 
 
 const SavingsHome = () => {
-  const { balance, isBalanceLoading, exchangeRate, wallet, walletAddress, savingsWallet, createNewSavingsWallet, errorMessage } = useContext(WalletContext)
+  const { exchangeRate, withdrawSavings, savingsWallet, createNewSavingsWallet, errorMessage } = useContext(WalletContext)
   const [canWithdraw, setCanWithdraw] = useState(false)
   const [countdown, setCountdown] = useState<CountdownProps>({ days: 0, hours: 0, minutes: 0, seconds: 0 })
+  const [withdrawalLoading, setWithdrawalLoading] = useState(false)
+  const [withdrawalMessage, setWithdrawalMessage] = useState("")
 
   const {
     savingsWalletAddress,
     balance: savingsWalletBalance,
     isLoading: isSavingsWalletLoading,
-    withdrawalDateTimestamp
+    withdrawalDateTimestamp,
+    withdrawalError
 } = savingsWallet
 
   function handleCreateNewSavingsWallet() {
@@ -37,8 +40,14 @@ const SavingsHome = () => {
 
   async function handleWithdraw(e: any) {
     e.preventDefault()
-    // do stuff
-    alert("withdraw")
+    setWithdrawalLoading(true)
+    setWithdrawalMessage('')
+    
+    // make a call to the 
+    await withdrawSavings()
+    setWithdrawalMessage(`You've just withdrawn ${savingsWalletBalance}ETH ($${(Number(savingsWalletBalance) * exchangeRate).toFixed(2)}).`)
+    setWithdrawalLoading(false)
+    
   }
 
   console.log("savings home: ", savingsWalletAddress, ethers.constants.AddressZero,savingsWalletAddress === ethers.constants.AddressZero)
@@ -91,6 +100,20 @@ const SavingsHome = () => {
   return (
     <div>
       <div className='my-6'>
+        {withdrawalError && <Alert className='mb-6' variant="destructive">
+          <AlertTriangleIcon className="h-4 w-4 text-input mt-1.5" />
+          <AlertTitle>Something went wrong</AlertTitle>
+          <AlertDescription>
+            {withdrawalError}.
+          </AlertDescription>
+        </Alert>}
+        {(withdrawalMessage != "" && withdrawalError == "" && !withdrawalLoading)  && <Alert className='mb-6'>
+          <LightbulbIcon className="h-4 w-4 text-input mt-1.5" />
+          <AlertTitle>Withdrawal Complete!</AlertTitle>
+          <AlertDescription>
+            {withdrawalMessage}
+          </AlertDescription>
+        </Alert>}
         <div className='w-full grid grid-cols-2 items-end mb-1 gap-1'>
           <span className='w-fit section-heading'>savings</span>
           {/* <Separator className='w-full bg-[#B4AAAA]' /> */}
@@ -113,7 +136,11 @@ const SavingsHome = () => {
         <Button variant="outline" className='w-full' disabled={true} >
             Deposit
         </Button>
-        <Button variant="outline" className='w-full' disabled={!canWithdraw} onClick={handleWithdraw}>
+        <Button variant="outline" className='w-full'
+          // disabled={!canWithdraw} 
+          disabled={withdrawalLoading || !canWithdraw}
+          isLoading={withdrawalLoading}
+          onClick={handleWithdraw}>
           Withdraw
         </Button>
       </div>
