@@ -199,15 +199,27 @@ export function WalletProvider({ children }: { children: React.ReactNode }) {
     );
 
     try {
-      const durationInUnixFormat = calculateWithdrawalDate(numberOfDays)
       setErrorMessage("");
-
-      // TODO take date in the future and turn it into an unsigned integer
-      const tx = await factoryContract!.createSavingsWallet(durationInUnixFormat);
+      const tx = await factoryContract!.createSavingsWallet(numberOfDays); // TODO should pass in the future date in days not in unix timestamp format
       await tx.wait()
       const _savingsWalletAddress = await factoryContract!.ownersToWallets(walletAddress);
       console.log('New Savings Wallet deployed at:', _savingsWalletAddress);
       setSavingsWalletAddress(_savingsWalletAddress);
+
+      // get savings balance
+      const balanceWei = await provider.getBalance(_savingsWalletAddress);
+      const balanceEth = ethers.utils.formatEther(balanceWei);
+      setSavingsWalletBalance(balanceEth);
+
+      // get withdrawal date
+      const savingsWalletContract = new ethers.Contract(
+        _savingsWalletAddress,
+        savingsContractABI,
+        provider
+      );
+      const _withdrawalDate = await savingsWalletContract!.getNextWithdrawalTimestamp();
+      setWithdrawalDateTimestamp(_withdrawalDate.toNumber());
+      
       setIsSavingsWalletLoading(false)
     } catch (error) {
       // @ts-ignore
@@ -257,7 +269,7 @@ export function WalletProvider({ children }: { children: React.ReactNode }) {
       provider
     );
     const _withdrawalDate = await savingsWalletContract!.getNextWithdrawalTimestamp();
-    setWithdrawalDateTimestamp(_withdrawalDate);
+    setWithdrawalDateTimestamp(_withdrawalDate.toNumber());
 
     setIsSavingsWalletLoading(false)
   }

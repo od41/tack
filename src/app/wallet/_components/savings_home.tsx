@@ -1,5 +1,5 @@
 "use client"
-import React, { useContext } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { Skeleton } from "@/components/ui/skeleton"
@@ -9,9 +9,18 @@ import { Alert, AlertTitle, AlertDescription } from '@/components/ui/alert';
 import { AlertTriangleIcon } from 'lucide-react';
 import { ethers } from 'ethers';
 
+type CountdownProps = {
+  days: number;
+  hours: number;
+  minutes: number;
+  seconds: number;
+}
+
 
 const SavingsHome = () => {
   const { balance, isBalanceLoading, exchangeRate, wallet, walletAddress, savingsWallet, createNewSavingsWallet, errorMessage } = useContext(WalletContext)
+  const [canWithdraw, setCanWithdraw] = useState(false)
+  const [countdown, setCountdown] = useState<CountdownProps>({ days: 0, hours: 0, minutes: 0, seconds: 0 })
 
   const {
     savingsWalletAddress,
@@ -21,7 +30,9 @@ const SavingsHome = () => {
 } = savingsWallet
 
   function handleCreateNewSavingsWallet() {
-    createNewSavingsWallet(15)
+    // create a withdrawal date of 15 days
+    const DEFAULT_WITHDRAWAL_DATE = 15
+    createNewSavingsWallet(DEFAULT_WITHDRAWAL_DATE) 
   }
 
   async function handleWithdraw(e: any) {
@@ -31,6 +42,34 @@ const SavingsHome = () => {
   }
 
   console.log("savings home: ", savingsWalletAddress, ethers.constants.AddressZero,savingsWalletAddress === ethers.constants.AddressZero)
+
+  const calculateTimeRemaining = (futureTime: number) => {
+    const currentTime = Math.floor(Date.now()/1000); // Current time in seconds
+    const timeDifference = futureTime - currentTime;
+
+    if (timeDifference <= 0) {
+      // Target date has passed
+      setCanWithdraw(true)
+      setCountdown({ days: 0, hours: 0, minutes: 0, seconds: 0 })
+    } else {
+      const days = Math.floor(timeDifference / (60 * 60 * 24));
+      const hours = Math.floor((timeDifference % (60 * 60 * 24)) / (60 * 60));
+      const minutes = Math.floor((timeDifference % (60 * 60)) / 60);
+      const seconds = Math.floor(timeDifference % 60);
+      
+      setCanWithdraw(false)
+      setCountdown({ days, hours, minutes, seconds })
+    }
+  };
+
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      calculateTimeRemaining(withdrawalDateTimestamp)
+    }, 1000);
+
+    return () => clearInterval(intervalId);
+  }, [withdrawalDateTimestamp])
+  
 
   if(!savingsWalletAddress || savingsWalletAddress === ethers.constants.AddressZero) {
     return <div className='flex flex-col items-center my-8'>
@@ -47,6 +86,7 @@ const SavingsHome = () => {
       <Button variant="outline" disabled={isSavingsWalletLoading} isLoading={isSavingsWalletLoading} onClick={handleCreateNewSavingsWallet}>Create new savings wallet</Button>
       </div>
   }
+  
 
   return (
     <div>
@@ -73,10 +113,31 @@ const SavingsHome = () => {
         <Button variant="outline" className='w-full' disabled={true} >
             Deposit
         </Button>
-        <Button variant="outline" className='w-full' onClick={handleWithdraw}>
+        <Button variant="outline" className='w-full' disabled={!canWithdraw} onClick={handleWithdraw}>
           Withdraw
         </Button>
       </div>
+
+      {!canWithdraw &&<div className="text-sm bg-stroke bg-opacity-20 border-white/50 border p-3 rounded-lg backdrop-blur-lg">
+           <div className='flex w-full justify-between'>
+            <div className="flex flex-col items-center">
+              <div className='text-2xl'>{countdown.days}</div>
+              <div className='uppercase text-[10px] tracking-wider'>Days</div>
+            </div>
+            <div className="flex flex-col items-center">
+              <div className='text-2xl text-muted'>{countdown.hours}</div>
+              <div className='uppercase text-[10px] tracking-wider'>hours</div>
+            </div>
+            <div className="flex flex-col items-center">
+              <div className='text-2xl text-muted'>{countdown.minutes}</div>
+              <div className='uppercase text-[10px] tracking-wider'>minutes</div>
+            </div>
+            <div className="flex flex-col items-center">
+              <div className='text-2xl text-muted'>{countdown.seconds}</div>
+              <div className='uppercase text-[10px] tracking-wider'>seconds</div>
+            </div>
+          </div>
+        </div>}
 
 
     </div>
