@@ -10,6 +10,7 @@
 /coverage
 
 # next.js
+.vercel
 /.next/
 /out/
 
@@ -42,3 +43,16 @@ next-env.d.ts
 # package-lock.json
 yarn.lock
 pnpm-lock.yaml
+
+out/
+build/
+dist/
+
+# plasmo - https://www.plasmo.com
+.plasmo
+
+# bpp - http://bpp.browser.market/
+keys.json
+
+# typescript
+.tsbuildinfo

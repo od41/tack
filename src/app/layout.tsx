@@ -12,8 +12,8 @@ const threeDCubesBg = require("@/assets/3d-cubes.png")
 const plusJakartaFont = Plus_Jakarta_Sans({subsets: ["latin"]})
 
 export const metadata: Metadata = {
-  title: 'Tack',
-  description: 'Smart savings for you',
+  title: 'Drops',
+  description: 'Wallet and savings browser extension',
 }
 
 export default async function RootLayout({
@@ -24,6 +24,7 @@ export default async function RootLayout({
 
   return (
     <html lang="en">
+      <head> </head>
       <body className={`${plusJakartaFont.className} overflow-hidden bg-[url('/blur-bg.png')] flex items-center justify-center`}>
         <ThemeProvider
           attribute="class"
