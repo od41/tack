@@ -1,0 +1,86 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+ 
+@layer base {
+
+  :root {
+    --primary-black: 0deg 0% 0%;
+    --primary-black-2: 0deg 0% 0%;
+    --white: 0deg 0% 100%;
+    --primary-white: 0deg 0% 100%;
+
+    --accent-shade: 228deg, 95%, 33%;
+    --accent-1: 222deg 47% 11%;
+    --accent-2: 228deg, 100%, 43%;
+    --accent-3: 330deg 81% 60%;
+    --accent-4: 0deg 91% 71%;
+
+    --white: 0deg 0% 100%;
+    --text: 0deg 0% 0%;
+    --text-alt: 230deg 39% 68%;
+    --text-muted: 226deg 22% 73%;
+
+    --stroke: 0deg 6% 69%;
+
+    --gray-50: 0deg 0% 98%;
+    --gray-100: 220deg 20% 97%;
+    --gray-200: 216deg 11% 91%;
+    --gray-300: 210deg 9% 82%;
+    --gray-400: 212deg 8% 65%;
+    --gray-700: 208deg 9% 30%;
+    --gray-600: 208deg 7% 37%;
+    --gray-500: 212deg 7% 43%;
+    --gray-800: 208deg 10% 25%;
+    --gray-900: 210deg 12% 16%;
+    --gray-1000: 210deg 12% 16%;
+
+    --radius: 0.5rem;
+  }
+
+  .dark {
+    --primary-black: 0deg 0% 0%;
+    --primary-white: 0deg 0% 100%;
+
+    --accent-shade: 222deg 46% 17%;
+    --accent-1: 222deg 47% 11%;
+    --accent-2: 241deg 77% 63%;
+    --accent-3: 330deg 81% 60%;
+    --accent-4: 0deg 91% 71%;
+    
+    --text: 226deg 100% 94%;
+    --text-alt: 230deg 39% 68%;
+    --text-muted: 226deg 22% 73%;
+
+    --stroke: 0deg 0% 98%;
+
+    --gray-50: 0deg 0% 98%;
+    --gray-100: 220deg 20% 97%;
+    --gray-200: 216deg 11% 91%;
+    --gray-300: 210deg 9% 82%;
+    --gray-400: 212deg 8% 65%;
+    --gray-700: 208deg 9% 30%;
+    --gray-600: 208deg 7% 37%;
+    --gray-500: 212deg 7% 43%;
+    --gray-800: 208deg 10% 25%;
+    --gray-900: 210deg 12% 16%;
+    --gray-1000: 210deg 12% 16%;
+  }
+}
+ 
+@layer base {
+  * {
+    /* @apply border-border; */
+  }
+  body {
+    /* @apply bg-background text-foreground; */
+  }
+}
+
+@layer utilities {
+  .section-heading {
+    text-transform: uppercase;
+    font-size: 0.75rem; 
+    letter-spacing: 1;
+  }
+}
