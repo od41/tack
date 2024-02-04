@@ -259,6 +259,7 @@ export function WalletProvider({ children }: { children: React.ReactNode }) {
 
     if (_savingsWalletAddress === ethers.constants.AddressZero) {
       setIsSavingsWalletLoading(false)
+      return
       throw Error("Wallet doesn't exist")
     }
 
