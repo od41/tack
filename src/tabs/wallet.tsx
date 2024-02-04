@@ -1,10 +1,10 @@
 import { Button } from '@/components/ui/button'
 import React from 'react'
-import WalletHome from '../../components/pages/wallet/wallet_home'
+import WalletHome from '../components/pages/wallet/wallet_home'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import SavingsHome from '../../components/pages/wallet/savings_home'
+import SavingsHome from '../components/pages/wallet/savings_home'
 import Link from 'next/link'
-import WalletProfile from '../../components/pages/wallet/wallet_profile'
+import WalletProfile from '../components/pages/wallet/wallet_profile'
 
 const WalletHomePage = () => {
   return (

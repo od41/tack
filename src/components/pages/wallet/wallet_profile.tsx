@@ -4,18 +4,18 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
 import { formatAddress } from '@/lib/utils'
 import { PowerIcon } from 'lucide-react'
-import { useRouter } from 'next/navigation'
+// import { useRouter } from 'next/navigation'
 import React, { useContext } from 'react'
 import { generateFromString } from 'generate-avatar'
 import CopyToClipboardButton from '@/components/ui/copy-to-clipboard'
 
 const WalletProfile = () => {
   const {walletAddress, logout} = useContext(WalletContext)
-  const router = useRouter()
+//   const router = useRouter()
   const avatar = generateFromString(walletAddress ? walletAddress : 'default-image-created-tack-2023')
 
   function handleLogout() {
-    router.push('/')
+    window.location.href = '/'
     logout()
   }
 

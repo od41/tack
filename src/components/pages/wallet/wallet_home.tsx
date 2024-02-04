@@ -33,7 +33,7 @@ const WalletHome = () => {
 
       <div className="flex w-full gap-3 mb-6">
         <Button variant="outline" className='w-full' asChild>
-        <Link href="/wallet/send">
+        <Link href="/send.html">
             Send
           </Link>
         </Button>

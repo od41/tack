@@ -1,6 +1,6 @@
 import { Button } from '@/components/ui/button'
 import React from 'react'
-import GenerateWallet from '../../../components/pages/root/generate_wallet'
+import GenerateWallet from '../components/pages/root/generate_wallet'
 
 const CreateWalletPage = () => {
   return (

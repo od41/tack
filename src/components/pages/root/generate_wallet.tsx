@@ -4,7 +4,7 @@ import { ethers } from 'ethers';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import Image from 'next/image';
-import { useRouter } from 'next/navigation';
+// import { useRouter } from 'next/navigation';
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
 const threeDCubesBg = require("@/assets/3d-cubes.png")
@@ -14,7 +14,7 @@ const GenerateWallet = () => {
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false)
   const { generateWallet: generateEncryptedJsonWallet, walletAddress } = useContext(WalletContext)
-  const router = useRouter()
+  // const router = useRouter()
 
   const generateWallet = () => {
     // Generate a new wallet
@@ -33,7 +33,8 @@ const GenerateWallet = () => {
     const status = await generateEncryptedJsonWallet(password, seedPhrase)
     if (status) {
       setLoading(false)
-      router.push('/wallet')
+      // router.push('/wallet')
+      window.location.href = '/tabs/wallet.html'
     } else {
       setLoading(false)
       alert('something went wrong')

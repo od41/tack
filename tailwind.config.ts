@@ -2,6 +2,7 @@ import type { Config } from 'tailwindcss'
 /** @type {import('tailwindcss').Config} */
 
 const config: Config = {
+  prefix: 'plasmo-',
   darkMode: ["class"],
   content: [
     './src/pages/**/*.{js,ts,jsx,tsx,mdx}',
@@ -71,6 +72,6 @@ const config: Config = {
       },
     },
   },
-  plugins: [require("tailwindcss-animate")],
+  plugins: [require("tailwindcss-animate")]
 }
 export default config

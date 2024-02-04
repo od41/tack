@@ -1,7 +1,6 @@
 
 import React, { useContext, useState } from 'react'
-import SendEth from '../../../components/pages/wallet/send/send_eth'
-import { WalletContext } from '@/context/wallet'
+import SendEth from '../components/pages/wallet/send/send_eth'
 
 const SendPage = () => {
   return (

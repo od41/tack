@@ -60,7 +60,7 @@ const WelcomePage = () => {
               Did you forget your password?
             </div>
             <Button variant="link" className='text-xs w-fit text-accent-2 h-5' asChild>
-              <Link href="/new/recover">
+              <Link href="/tabs/recover.html">
                 Recover Wallet
               </Link>
             </Button>
@@ -74,7 +74,7 @@ const WelcomePage = () => {
             Are you new here? 
           </div>
         <Button variant="link" className='text-xs w-fit text-accent-2 h-5' asChild>
-        <Link href="/new/wallet">
+        <Link href="/tabs/new-wallet.html">
           Create a Wallet
           </Link>
         </Button>

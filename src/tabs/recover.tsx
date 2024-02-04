@@ -7,14 +7,14 @@ import Link from 'next/link'
 import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
 const threeDCubesBg = require("@/assets/3d-cubes.png")
-import { useRouter } from 'next/navigation'
+// import { useRouter } from 'next/navigation'
 
 const RecoverPage = () => {
   const [seedPhrase, setSeedPhrase] = useState('')
   const [loading, setLoading] = useState(false)
   const [errorMessage, setErrorMessage] = useState("")
   const {recover, walletAddress} = useContext(WalletContext)
-  const router = useRouter()
+  // const router = useRouter()
 
   const handleRecover = (e: any) => {
     setLoading(true)
@@ -23,7 +23,8 @@ const RecoverPage = () => {
     try {
       recover(seedPhrase)
       setLoading(false)
-      router.push('/wallet')
+      // router.push('/wallet')
+      window.location.href = '/tabs/wallet.html'
 
     }catch(err){
       setLoading(false)
