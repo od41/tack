@@ -6,3 +6,18 @@ Drops wallet is a non-custodial wallet browser extension. The features I impleme
 - Activate a savings feature.
 - Use a savings contract that only the user can withdraw from. 
 - Save tokens by rounding up transfers, swaps purchases etc. For example, if you swap for $47.83, the wallet rounds it up to $50 and sends the $2.17 difference to your savings.
+
+### Video Demo
+
+[Watch Video Demo](https://youtu.be/9zU3Q1sAAZw)
+
+### Blockscout
+
+#### Watchlist
+![Screenshot of watchlist](/readme_images/watch_list.png?raw=true "Watchlist screenshot")
+
+#### Private tags
+![Screenshot of private tags](/readme_images/private_tags.png?raw=true "Private tags screenshot")
+
+#### Public tags
+![Screenshot of Public tags](/readme_images/public_tags.png?raw=true "Public tags screenshot")
